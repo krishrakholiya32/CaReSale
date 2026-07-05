@@ -1,0 +1,260 @@
+:root {
+  --bg: #0d1512;
+  --card: #131f1a;
+  --border: #23342c;
+  --text: #e7f2ec;
+  --muted: #8ea89b;
+  --accent: #14b881;
+  --accent-hover: #0f9c6c;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --bg: #f3f8f5;
+    --card: #ffffff;
+    --border: #d7e6de;
+    --text: #10201a;
+    --muted: #5a7568;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+.app-shell {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 2rem 1.25rem 4rem;
+}
+
+header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+header h1 {
+  font-size: 1.9rem;
+  margin-bottom: 0.4rem;
+}
+
+header p {
+  color: var(--muted);
+  margin: 0;
+}
+
+.car-form {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  position: relative;
+  flex: 1;
+}
+
+.field-row {
+  display: flex;
+  gap: 1rem;
+}
+
+.field select,
+.field input {
+  width: 100%;
+  min-width: 0;
+}
+
+@media (max-width: 480px) {
+  .field-row {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .app-shell {
+    padding: 1.25rem 0.85rem 3rem;
+  }
+
+  .price-range-value {
+    font-size: 1.6rem;
+  }
+
+  .specs-card ul {
+    grid-template-columns: 1fr;
+  }
+}
+
+.field label {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.field input,
+.field select {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.6rem 0.7rem;
+  color: var(--text);
+  font-size: 0.95rem;
+}
+
+.model-suggestions {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin-top: 0.25rem;
+  max-height: 220px;
+  overflow-y: auto;
+  list-style: none;
+  padding: 0.25rem;
+}
+
+.model-suggestions li {
+  padding: 0.5rem 0.6rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.model-suggestions li:hover {
+  background: var(--accent);
+  color: white;
+}
+
+.car-form button {
+  background: var(--accent);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 0.85rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.car-form button:hover:not(:disabled) {
+  background: var(--accent-hover);
+}
+
+.car-form button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.hint {
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin: 0;
+}
+
+.error {
+  color: #ef4444;
+  font-weight: 500;
+}
+
+.price-result {
+  margin-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.price-range-card,
+.specs-card,
+.similar-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+
+.price-range-card h2 {
+  margin-top: 0;
+  font-size: 1.1rem;
+  color: var(--muted);
+}
+
+.price-range-value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.price-median {
+  color: var(--muted);
+  margin-top: 0.25rem;
+}
+
+.disclaimer {
+  font-size: 0.82rem;
+  color: var(--muted);
+  margin-top: 1rem;
+  margin-bottom: 0;
+  border-top: 1px solid var(--border);
+  padding-top: 0.75rem;
+}
+
+.specs-card h3,
+.similar-card h3 {
+  margin-top: 0;
+}
+
+.specs-card ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+}
+
+.table-scroll {
+  overflow-x: auto;
+}
+
+.similar-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  font-size: 0.85rem;
+  min-width: 480px;
+}
+
+.similar-table th,
+.similar-table td {
+  text-align: left;
+  padding: 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.similar-table th {
+  color: var(--muted);
+  font-weight: 500;
+}
+
+footer {
+  text-align: center;
+  margin-top: 3rem;
+  color: var(--muted);
+  font-size: 0.8rem;
+}
