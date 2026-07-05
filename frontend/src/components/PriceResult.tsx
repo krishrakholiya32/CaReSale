@@ -53,7 +53,7 @@ export function PriceResult({ result }: Props) {
             <BarChart data={chartData} layout="vertical" margin={{ left: 0, right: 20 }}>
               <XAxis type="number" tickFormatter={(v) => `₹${(v / 1000).toFixed(0)}k`} tick={{ fontSize: 11 }} />
               <YAxis type="category" dataKey="label" width={110} tick={{ fontSize: 10 }} />
-              <Tooltip formatter={(v: number) => formatRupees(v)} />
+              <Tooltip formatter={(v) => formatRupees(Number(v))} />
               <Bar dataKey="price" radius={[0, 4, 4, 0]}>
                 {chartData.map((_, i) => (
                   <Cell key={i} fill="#14b881" />
