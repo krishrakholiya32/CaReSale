@@ -23,6 +23,25 @@
 
 ---
 
+<table>
+  <tr>
+    <td><img src="docs/screenshots/1-landing.png" alt="Landing page" width="100%"></td>
+    <td><img src="docs/screenshots/2-form-filled.png" alt="Form filled in" width="100%"></td>
+  </tr>
+  <tr>
+    <td align="center"><em>Landing — brand/model search, year/km/fuel inputs</em></td>
+    <td align="center"><em>Filled in — a real 2018 Maruti Swift Dzire diesel example</em></td>
+  </tr>
+  <tr>
+    <td colspan="2"><img src="docs/screenshots/3-result.png" alt="Prediction result" width="100%"></td>
+  </tr>
+  <tr>
+    <td colspan="2" align="center"><em>Result — price range, auto-filled specs, and real comparable listings</em></td>
+  </tr>
+</table>
+
+---
+
 ## Why This Project
 
 Every other project in this portfolio (kGPT, PptGen, ClauseGuard) is built around calling an
