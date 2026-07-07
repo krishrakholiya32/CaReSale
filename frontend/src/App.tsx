@@ -32,7 +32,14 @@ function App() {
       </header>
 
       <main>
-        <CarForm onSubmit={handleSubmit} loading={loading} />
+        <CarForm
+          onSubmit={handleSubmit}
+          loading={loading}
+          onClear={() => {
+            setResult(null)
+            setError(null)
+          }}
+        />
         {error && <p className="error">{error}</p>}
         {result && <PriceResult result={result} />}
       </main>

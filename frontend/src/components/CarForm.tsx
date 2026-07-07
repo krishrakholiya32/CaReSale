@@ -10,12 +10,13 @@ const OWNER_OPTIONS = ["First Owner", "Second Owner", "Third Owner", "Fourth & A
 interface Props {
   onSubmit: (req: PredictRequest) => void
   loading: boolean
+  onClear: () => void
 }
 
 const DEFAULT_YEAR = 2018
 const DEFAULT_KM_DRIVEN = 50000
 
-export function CarForm({ onSubmit, loading }: Props) {
+export function CarForm({ onSubmit, loading, onClear }: Props) {
   const [brands, setBrands] = useState<string[]>([])
   const [brand, setBrand] = useState("")
   const [brandModels, setBrandModels] = useState<string[]>([])
@@ -77,6 +78,7 @@ export function CarForm({ onSubmit, loading }: Props) {
     setSellerType(SELLER_OPTIONS[0])
     setTransmission(TRANSMISSION_OPTIONS[0])
     setOwner(OWNER_OPTIONS[0])
+    onClear()
   }
 
   const canSubmit = selectedModel.trim().length > 0 && year > 1990 && kmDriven >= 0
