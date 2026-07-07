@@ -12,14 +12,18 @@ interface Props {
   loading: boolean
 }
 
+const DEFAULT_YEAR = 2018
+const DEFAULT_KM_DRIVEN = 50000
+
 export function CarForm({ onSubmit, loading }: Props) {
   const [brands, setBrands] = useState<string[]>([])
   const [brand, setBrand] = useState("")
+  const [brandModels, setBrandModels] = useState<string[]>([])
   const [modelQuery, setModelQuery] = useState("")
   const [modelOptions, setModelOptions] = useState<string[]>([])
   const [selectedModel, setSelectedModel] = useState("")
-  const [year, setYear] = useState(2018)
-  const [kmDriven, setKmDriven] = useState(50000)
+  const [year, setYear] = useState(DEFAULT_YEAR)
+  const [kmDriven, setKmDriven] = useState(DEFAULT_KM_DRIVEN)
   const [fuel, setFuel] = useState(FUEL_OPTIONS[0])
   const [sellerType, setSellerType] = useState(SELLER_OPTIONS[0])
   const [transmission, setTransmission] = useState(TRANSMISSION_OPTIONS[0])
@@ -29,18 +33,51 @@ export function CarForm({ onSubmit, loading }: Props) {
     fetchBrands().then(setBrands).catch(() => setBrands([]))
   }, [])
 
+  // Once a brand is picked, show every model for that brand as a plain dropdown
+  // instead of making the user type-search — mirrors the brand selector's UX.
   useEffect(() => {
-    if (modelQuery.trim().length < 2) {
+    if (!brand) {
+      setBrandModels([])
+      return
+    }
+    searchModels("", brand, 1000)
+      .then(setBrandModels)
+      .catch(() => setBrandModels([]))
+  }, [brand])
+
+  useEffect(() => {
+    if (brand || modelQuery.trim().length < 2) {
       setModelOptions([])
       return
     }
     const timeout = setTimeout(() => {
-      searchModels(modelQuery, brand || undefined)
+      searchModels(modelQuery)
         .then(setModelOptions)
         .catch(() => setModelOptions([]))
     }, 250)
     return () => clearTimeout(timeout)
   }, [modelQuery, brand])
+
+  function handleBrandChange(next: string) {
+    setBrand(next)
+    setSelectedModel("")
+    setModelQuery("")
+    setModelOptions([])
+  }
+
+  function handleClear() {
+    setBrand("")
+    setBrandModels([])
+    setModelQuery("")
+    setModelOptions([])
+    setSelectedModel("")
+    setYear(DEFAULT_YEAR)
+    setKmDriven(DEFAULT_KM_DRIVEN)
+    setFuel(FUEL_OPTIONS[0])
+    setSellerType(SELLER_OPTIONS[0])
+    setTransmission(TRANSMISSION_OPTIONS[0])
+    setOwner(OWNER_OPTIONS[0])
+  }
 
   const canSubmit = selectedModel.trim().length > 0 && year > 1990 && kmDriven >= 0
 
@@ -63,7 +100,7 @@ export function CarForm({ onSubmit, loading }: Props) {
     >
       <div className="field">
         <label>Brand</label>
-        <select value={brand} onChange={(e) => setBrand(e.target.value)}>
+        <select value={brand} onChange={(e) => handleBrandChange(e.target.value)}>
           <option value="">Any brand</option>
           {brands.map((b) => (
             <option key={b} value={b}>{b}</option>
@@ -73,29 +110,40 @@ export function CarForm({ onSubmit, loading }: Props) {
 
       <div className="field">
         <label>Car model</label>
-        <input
-          type="text"
-          placeholder="Start typing e.g. Swift, i20, Baleno..."
-          value={selectedModel || modelQuery}
-          onChange={(e) => {
-            setSelectedModel("")
-            setModelQuery(e.target.value)
-          }}
-        />
-        {modelOptions.length > 0 && !selectedModel && (
-          <ul className="model-suggestions">
-            {modelOptions.map((m) => (
-              <li
-                key={m}
-                onClick={() => {
-                  setSelectedModel(m)
-                  setModelOptions([])
-                }}
-              >
-                {m}
-              </li>
+        {brand ? (
+          <select value={selectedModel} onChange={(e) => setSelectedModel(e.target.value)}>
+            <option value="">Select a model</option>
+            {brandModels.map((m) => (
+              <option key={m} value={m}>{m}</option>
             ))}
-          </ul>
+          </select>
+        ) : (
+          <>
+            <input
+              type="text"
+              placeholder="Start typing e.g. Swift, i20, Baleno..."
+              value={selectedModel || modelQuery}
+              onChange={(e) => {
+                setSelectedModel("")
+                setModelQuery(e.target.value)
+              }}
+            />
+            {modelOptions.length > 0 && !selectedModel && (
+              <ul className="model-suggestions">
+                {modelOptions.map((m) => (
+                  <li
+                    key={m}
+                    onClick={() => {
+                      setSelectedModel(m)
+                      setModelOptions([])
+                    }}
+                  >
+                    {m}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </>
         )}
       </div>
 
@@ -151,9 +199,14 @@ export function CarForm({ onSubmit, loading }: Props) {
         </div>
       </div>
 
-      <button type="submit" disabled={!canSubmit || loading}>
-        {loading ? "Estimating..." : "Get Price Estimate"}
-      </button>
+      <div className="field-row">
+        <button type="submit" disabled={!canSubmit || loading}>
+          {loading ? "Estimating..." : "Get Price Estimate"}
+        </button>
+        <button type="button" className="clear-button" onClick={handleClear} disabled={loading}>
+          Clear
+        </button>
+      </div>
       {!selectedModel && modelQuery.trim().length > 0 && modelOptions.length === 0 && (
         <p className="hint">Pick a model from the suggestions above to continue.</p>
       )}

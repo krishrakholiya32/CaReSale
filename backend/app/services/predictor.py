@@ -128,4 +128,8 @@ def search_car_names(query: str, brand: Optional[str] = None, limit: int = 20) -
     matches = [n for n in KNOWN_CAR_NAMES if query_lower in n.lower()]
     if brand:
         matches = [n for n in matches if n.lower().startswith(brand.lower())]
+        # Listing every model for a brand (empty query) is a dropdown, not a
+        # ranked search result, so it should read alphabetically.
+        if not query:
+            matches = sorted(matches)
     return matches[:limit]

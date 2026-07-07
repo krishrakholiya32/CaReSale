@@ -161,6 +161,21 @@ header p {
   cursor: not-allowed;
 }
 
+.car-form button[type="submit"] {
+  flex: 2;
+}
+
+.car-form .clear-button {
+  flex: 1;
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+
+.car-form .clear-button:hover:not(:disabled) {
+  background: var(--bg);
+}
+
 .hint {
   font-size: 0.8rem;
   color: var(--muted);

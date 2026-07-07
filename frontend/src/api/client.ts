@@ -13,9 +13,10 @@ export async function fetchBrands(): Promise<string[]> {
   return res.json()
 }
 
-export async function searchModels(query: string, brand?: string): Promise<string[]> {
+export async function searchModels(query: string, brand?: string, limit?: number): Promise<string[]> {
   const params = new URLSearchParams({ q: query })
   if (brand) params.set("brand", brand)
+  if (limit) params.set("limit", String(limit))
   const res = await fetch(`${BASE}/models?${params.toString()}`)
   if (!res.ok) throw new Error("Failed to search models")
   return res.json()

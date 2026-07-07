@@ -39,5 +39,9 @@ def get_brands():
 
 
 @router.get("/models")
-def search_models(q: str = Query("", min_length=0), brand: Optional[str] = None):
-    return predictor.search_car_names(q, brand=brand)
+def search_models(
+    q: str = Query("", min_length=0),
+    brand: Optional[str] = None,
+    limit: int = Query(20, ge=1, le=1000),
+):
+    return predictor.search_car_names(q, brand=brand, limit=limit)
