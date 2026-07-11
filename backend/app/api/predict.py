@@ -1,7 +1,7 @@
 from typing import Optional
 
 from fastapi import APIRouter, Query
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 
 from app.services import predictor
 
@@ -16,7 +16,15 @@ class PredictRequest(BaseModel):
     seller_type: str
     transmission: str
     owner: str
-    seats: Optional[int] = None
+    seats: Optional[int] = Field(None, ge=2, le=14)
+
+    @field_validator("fuel", "seller_type", "transmission", "owner")
+    @classmethod
+    def _known_category(cls, v: str, info) -> str:
+        known = predictor.KNOWN_CATEGORIES[info.field_name]
+        if v not in known:
+            raise ValueError(f"must be one of {known}")
+        return v
 
 
 @router.post("/predict")

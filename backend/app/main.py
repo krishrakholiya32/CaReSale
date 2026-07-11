@@ -53,9 +53,17 @@ if _FRONTEND_DIST.exists():
     if _assets_dir.exists():
         app.mount("/assets", StaticFiles(directory=str(_assets_dir)), name="assets")
 
+    _FRONTEND_DIST_RESOLVED = _FRONTEND_DIST.resolve()
+
     @app.get("/{full_path:path}", include_in_schema=False)
     async def serve_spa(full_path: str):
-        candidate = _FRONTEND_DIST / full_path
-        if full_path and candidate.is_file():
+        candidate = (_FRONTEND_DIST / full_path).resolve()
+        # Reject anything that escapes the dist dir (e.g. "../../backend/app/main.py")
+        # before ever touching the filesystem for existence/is_file checks.
+        if (
+            full_path
+            and candidate.is_relative_to(_FRONTEND_DIST_RESOLVED)
+            and candidate.is_file()
+        ):
             return FileResponse(str(candidate))
         return FileResponse(str(_FRONTEND_DIST / "index.html"))

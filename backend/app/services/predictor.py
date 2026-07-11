@@ -31,6 +31,11 @@ _FEATURE_ORDER = list(_quantile_models[0.5].feature_name_)
 
 CURRENT_YEAR = int(_cleaned["year"].max()) + 1
 
+# encoder.categories_ is ordered to match CATEGORICAL_COLS (fit-time column order).
+KNOWN_CATEGORIES: dict[str, list[str]] = {
+    col: list(cats) for col, cats in zip(CATEGORICAL_COLS, _encoder.categories_)
+}
+
 
 def _resolve_specs(name: str, brand: str, seats_override: Optional[int]) -> dict:
     model_specs = _spec_lookup["model_specs"]
