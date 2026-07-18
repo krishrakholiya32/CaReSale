@@ -42,6 +42,14 @@
 
 ---
 
+## Demo
+
+![CaReSale Demo](docs/demo.gif)
+
+Try it live at **[caresale.zrik.tech](https://caresale.zrik.tech)**
+
+---
+
 ## Why This Project
 
 Every other project in this portfolio (kGPT, PptGen, ClauseGuard) is built around calling an
